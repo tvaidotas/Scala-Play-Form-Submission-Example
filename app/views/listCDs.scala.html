@@ -1,0 +1,26 @@
+@(cds: Seq[CD], form: Form[CD])(implicit messages: Messages)
+
+@main("CDs") {
+
+  <h1>CDs</h1>
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Price</th>
+    </thead>
+    <tbody>
+    @for(cd <- cds) {
+      <tr><td>@cd.name</td><td>@cd.price</td></tr>
+    }
+    </tbody>
+  </table>
+
+  <hr/>
+
+  @helper.form(routes.Application.createCD()) {
+    @helper.inputText(form("name"), 'id -> "SomeId", 'class -> "SomeClass")
+    @helper.inputText(form("price"))
+    <button type="submit">Create CD</button>
+  }
+
+
+}
