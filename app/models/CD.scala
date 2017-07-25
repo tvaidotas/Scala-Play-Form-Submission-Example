@@ -22,12 +22,4 @@ object CD {
     CD("CD 3", 789)
   )
 
-  case class UserListData(name: String, emails: List[String])
-  val userFormRepeated = Form(
-    mapping(
-      "name" -> text,
-      "emails" -> list(email)
-    )(UserListData.apply)(UserListData.unapply)
-  )
-
 }

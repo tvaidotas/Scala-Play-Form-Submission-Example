@@ -15,15 +15,16 @@ class Application @Inject()(val messagesApi: MessagesApi) extends Controller wit
   }
 
   def listCDs = Action { implicit request =>
-    Ok(views.html.listCDs(CD.cds, CD.createCDForm.fill(CD.cds.head)))
+    Ok(views.html.listCDs(CD.cds, CD.createCDForm))
   }
 
   def createCD = Action { implicit request =>
+
     val formValidationResult = CD.createCDForm.bindFromRequest
     formValidationResult.fold({ formWithErrors =>
       BadRequest(views.html.listCDs(CD.cds, formWithErrors))
-    }, { widget =>
-      CD.cds.append(widget)
+    }, { cd =>
+      CD.cds.append(cd)
       Redirect(routes.Application.listCDs)
     })
   }
