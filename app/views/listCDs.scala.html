@@ -1,21 +1,38 @@
 @(cds: Seq[CD], form: Form[CD])(implicit messages: Messages)
 
+@* the template file is like a function and therefore it can have expected arguments *@
+@* in this case it is expecting a collection of CD's for us to display  *@
+@* it also expects a form of type CD *@
+@* then we have the implicit messages in the second set of arguments *@
+@* the implicit messages is required for the form helper to build up the form *@
+@* due to the plays ability of supporting internationalisation *@
+
 @main("CDs") {
 
+  @* Some HTML code to list out the CD's that we passed in a table with two columns *@
   <h1>CDs</h1>
   <table>
     <thead>
       <tr><th>Name</th><th>Price</th>
     </thead>
     <tbody>
-    @for(cd <- cds) {
-      <tr><td>@cd.name</td><td>@cd.price</td></tr>
-    }
+      @for(cd <- cds) {
+        <tr><td>@cd.name</td><td>@cd.price</td></tr>
+      }
     </tbody>
   </table>
 
   <hr/>
 
+  @* we start by using the helper.form and inside the parentheses we define where this form *@
+  @* will be posted to *@
+  @* after that we define the input text fields to which we pass the form which was passed by the  *@
+  @* controller method and define that this inputText field is the name field which we need for our CD case class *@
+  @* additionally we are able to pass other fields for when the text field is created so that the HTML for it  *@
+  @* would have a specific id and a class set *@
+  @* if you don't want to define the additional fields then you can just pass the form and to which case class  *@
+  @* field this maps to *@
+  @* lastly we have a button to actually submit this form *@
   @helper.form(routes.Application.createCD()) {
     @helper.inputText(form("name"), 'id -> "SomeId", 'class -> "SomeClass")
     @helper.inputText(form("price"))
