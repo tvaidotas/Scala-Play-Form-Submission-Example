@@ -1,8 +1,33 @@
 @(message: String)
 
-
 @main("Welcome to Play") {
 
-    @play20.welcome(message)
+    <!-- Begin page content -->
+    <div class="container">
+        <div class="page-header">
+            <h3>
+                A basic example to handle and test MultipartFormData request in Play Framework 2.3.8
+            </h3>
+        </div>
+
+        <div class="row well">
+            <div class="col-lg-12">
+            @helper.form(action = routes.Application.upload, 'enctype -> "multipart/form-data") {
+                <div class="form-group">
+                    <label for="file">File</label>
+                    <input type="file" id="file" name="file">
+                    <p class="help-block">Select file for upload.</p>
+                </div>
+
+                <button type="submit" class="btn btn-info">Upload</button>
+            }
+            </div>
+        </div>
+
+    </div>
+    <br>
+    <br>
+    <br>
+    <img class='imagem_artigo'  src="data:image/png;base64, @message" alt="IMG DESC">
 
 }
