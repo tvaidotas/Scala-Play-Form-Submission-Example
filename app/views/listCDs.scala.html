@@ -13,7 +13,7 @@
   <h1>CDs</h1>
   <table>
     <thead>
-      <tr><th>Name</th><th>Price</th>
+      <tr><th>Name</th><th>Price</th></tr>
     </thead>
     <tbody>
       @for(cd <- cds) {
@@ -24,6 +24,7 @@
 
   <hr/>
 
+  @* helper.form basically replaces the need for you to define the form in HTML *@
   @* we start by using the helper.form and inside the parentheses we define where this form *@
   @* will be posted to *@
   @* after that we define the input text fields to which we pass the form which was passed by the  *@
@@ -34,10 +35,28 @@
   @* field this maps to *@
   @* lastly we have a button to actually submit this form *@
   @helper.form(routes.Application.createCD()) {
-    @helper.inputText(form("name"), 'id -> "SomeId", 'class -> "SomeClass")
-    @helper.inputText(form("price"))
+    @* an example of how we can pass additional arguments for the helper *@
+    @* in this CD example having '_showConstraints -> false will hide the requirement Required *@
+    @helper.inputText(form("name"), '_label -> "Name", '_showConstraints -> false)
+    @helper.inputText(form("price"), '_label -> "Price" , '_showConstraints -> false)
     <button type="submit">Create CD</button>
   }
 
+  @* This helper will generate the HTML for this form and it will look like this *@
+  @* <form action="/cds" method="POST">
+    <dl class=" " id="name_field">
+      <dt><label for="name">Name</label></dt>
+      <dd>
+        <input type="text" id="name" name="name" value="">
+      </dd>
+    </dl>
+    <dl class=" " id="price_field">
+      <dt><label for="price">Price</label></dt>
+      <dd>
+        <input type="text" id="price" name="price" value="">
+      </dd>
+    </dl>
+    <button type="submit">Create CD</button>
+  </form> *@
 
 }

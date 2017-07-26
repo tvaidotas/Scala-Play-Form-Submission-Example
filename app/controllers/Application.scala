@@ -22,8 +22,11 @@ class Application @Inject()(val messagesApi: MessagesApi) extends Controller wit
   def createCD = Action { implicit request =>
     // we create a value to which we assign the form and bind the values that were submitted and are in the response
     val formValidationResult = CD.createCDForm.bindFromRequest
-    // we then fold over the form
-    // the first case of folding is the one where the data passed for the form was incorrect
+    // we then fold over the form where fold is a method that belongs to Form and what it does is
+    // takes in two functions, where the first one has to handle the form with errors
+    // and the second one has to handle the successful form submission
+    // you could look at fold like this .fold({ Function for error}, { Function for success })
+    // the first function of folding is the one where the data passed for the form was incorrect
     // therefore our form with the errors on it is binded to the formWithErrors
     // And we then return a BadRequest to signify that it wasn't correct and for the BadRequest we then pass
     // the same view file, as the view file requires an argument of Seq[CD] we pass that from the CD object
