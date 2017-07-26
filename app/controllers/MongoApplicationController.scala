@@ -14,7 +14,7 @@ import play.modules.reactivemongo.{MongoController, ReactiveMongoApi, ReactiveMo
 import reactivemongo.play.json._
 import collection._
 
-class ApplicationUsingJsonReadersWriters @Inject() (val reactiveMongoApi: ReactiveMongoApi) extends Controller
+class MongoApplicationController @Inject()(val reactiveMongoApi: ReactiveMongoApi) extends Controller
   with MongoController with ReactiveMongoComponents {
 
   def collection: Future[JSONCollection] = database.map(
