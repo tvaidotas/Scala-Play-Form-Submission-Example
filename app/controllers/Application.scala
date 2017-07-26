@@ -7,12 +7,29 @@ import javax.inject.Inject
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64
 import models.CD
 import play.api.i18n.{I18nSupport, MessagesApi}
+
+import akka.stream.Materializer
+import play.api.http.ContentTypes
+import play.api.libs.Comet
 import play.api.mvc._
 
-class Application @Inject()(val messagesApi: MessagesApi) extends Controller with I18nSupport {
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
-  def index = Action {
-    Ok(views.html.index(returnBytedImage))
+import akka.stream.scaladsl.Source
+import play.api.libs.json._
+
+import scala.concurrent.duration._
+
+
+class Application @Inject()(val messagesApi: MessagesApi, val materializer: Materializer) extends Controller with I18nSupport {
+
+//  def index = Action {
+//    Ok(views.html.index(returnBytedImage))
+//  }
+
+  def index() = Action {
+    Ok(views.html.comet())
   }
 
   def listCDs = Action { implicit request =>
@@ -71,6 +88,28 @@ class Application @Inject()(val messagesApi: MessagesApi) extends Controller wit
     "Byting failed"
   }
 
+  def cometString = Action {
+    implicit val m = materializer
+    def stringSource: Source[String, _] = Source(List("kiki", "foo", "bar"))
+    Ok.chunked(stringSource via Comet.string("parent.cometMessage")).as(ContentTypes.HTML)
+  }
+
+  def cometJson = Action {
+    implicit val m = materializer
+    def jsonSource: Source[JsValue, _] = Source(List(JsString("jsonString")))
+    Ok.chunked(jsonSource via Comet.json("parent.cometMessage")).as(ContentTypes.HTML)
+  }
+
+  def streamClock() = Action {
+    Ok.chunked(stringSource via Comet.string("parent.clockChanged")).as(ContentTypes.HTML)
+  }
+
+  def stringSource: Source[String, _] = {
+    val df: DateTimeFormatter = DateTimeFormatter.ofPattern("HH mm ss")
+    val tickSource = Source.tick(0 millis, 100 millis, "TICK")
+    val s = tickSource.map((tick) => df.format(ZonedDateTime.now()))
+    s
+  }
 
 }
 

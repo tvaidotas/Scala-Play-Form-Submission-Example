@@ -9,3 +9,10 @@ POST    /cds                        controllers.Application.createCD
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 POST   /upload                      controllers.Application.upload
+
+GET    /comet                       controllers.Application.cometString
+GET    /cometjs                       controllers.Application.cometJson
+
+
+GET        /scala/comet                        controllers.Application.index()
+GET        /scala/comet/liveClock              controllers.Application.streamClock()
