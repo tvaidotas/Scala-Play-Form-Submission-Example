@@ -2,13 +2,26 @@ package controllers
 
 import javax.inject.Inject
 
-import models.CD
+import models.{CD, Feed, User}
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.Json
 import play.api.mvc._
 
 class Application @Inject()(val messagesApi: MessagesApi) extends Controller with I18nSupport {
 
   def index = Action {
+
+    implicit val feedWrites = Json.writes[Feed]
+    implicit val userWrites = Json.writes[User]
+    val feed = Seq(Feed("saasasas","assaasas"))
+    val user = User(2, "Tadas", "Vaidotas", feed)
+    val userJson = Json.toJson(user)
+    println("# " + userJson)
+
+    implicit val feedReads = Json.reads[Feed]
+    implicit val userReads = Json.reads[User]
+    val userFromJson = Json.fromJson[User](userJson)
+    println("# " + userFromJson)
     Ok(views.html.index("Your new application is ready."))
   }
 

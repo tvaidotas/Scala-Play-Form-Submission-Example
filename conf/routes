@@ -4,6 +4,8 @@ GET     /                           controllers.Application.index
 # we define a route for listing all the CDs and another one for submitting the form of adding them
 GET     /cds                        controllers.Application.listCDs
 POST    /cds                        controllers.Application.createCD
+GET    /createtadas                 controllers.ApplicationUsingJsonReadersWriters.create
+GET    /findtadas                   controllers.ApplicationUsingJsonReadersWriters.findByName
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
