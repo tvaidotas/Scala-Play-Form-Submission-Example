@@ -12,3 +12,4 @@ libraryDependencies ++= Seq( jdbc , cache , ws , specs2 % Test )
 
 unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )
 
+PlayKeys.devSettings := Seq("play.server.http.port" -> "8080")

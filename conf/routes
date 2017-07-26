@@ -1,10 +1,7 @@
-# Routes
-# This file defines all application routes (Higher priority routes first)
-# ~~~~
-
 # Home page
 GET     /                           controllers.Application.index
 
+# we define a route for listing all the CDs and another one for submitting the form of adding them
 GET     /cds                        controllers.Application.listCDs
 POST    /cds                        controllers.Application.createCD
 
