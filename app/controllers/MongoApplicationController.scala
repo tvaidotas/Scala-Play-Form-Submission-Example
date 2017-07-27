@@ -18,10 +18,11 @@ class MongoApplicationController @Inject()(val reactiveMongoApi: ReactiveMongoAp
 
   // TODO - keep in mind you need to have mongod.exe running before attempting to play around
 
-  def collection: Future[JSONCollection] = database.map(
-    _.collection[JSONCollection]("persons"))
+  def collection: Future[JSONCollection] = database.map(_.collection[JSONCollection]("persons"))
 
   def create: Action[AnyContent] = Action.async {
+    //case class User(age: Int, firstName: String, lastName: String, feeds: Seq[Feed])
+    //case class Feed(name: String, url: String)
     val user = User(29, "FirstName", "Lastname", List(Feed("BBC news", "http://www.bbc.co.uk")))
     val futureResult = collection.flatMap(_.insert(user))
     futureResult.map(_ => Ok("Added user " + user.firstName + " " + user.lastName))

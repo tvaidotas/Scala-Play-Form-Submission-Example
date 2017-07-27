@@ -10,6 +10,7 @@ class Application @Inject()(val messagesApi: MessagesApi, environment: play.api.
 
   def displayFile = Action {
     // an example of serving the file
+    // you would need a route and to change the path to see how it works
     Ok.sendFile(
       content = new java.io.File("C:/Users/tadas/Desktop/toUploadTo/1.jpg"),
       inline = true

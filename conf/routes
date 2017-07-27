@@ -4,6 +4,8 @@ GET         /                    controllers.Application.index
 # we define a route for listing all the CDs and another one for submitting the form of adding them
 GET         /cds                 controllers.Application.listCDs
 POST        /cds                 controllers.Application.createCD
+
+# routes for interacting with mongo
 GET         /createperson        controllers.MongoApplicationController.create
 GET         /findperson          controllers.MongoApplicationController.findByName
 
