@@ -2,27 +2,29 @@ package controllers
 
 import javax.inject.Inject
 
-import models.{CD, Feed, User}
+import models.CD
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Json
 import play.api.mvc._
 
-class Application @Inject()(val messagesApi: MessagesApi) extends Controller with I18nSupport {
+class Application @Inject()(val messagesApi: MessagesApi, environment: play.api.Environment) extends Controller with I18nSupport {
+
+  def displayFile = Action {
+    // an example of serving the file
+    Ok.sendFile(
+      content = new java.io.File("C:/Users/tadas/Desktop/toUploadTo/1.jpg"),
+      inline = true
+    )
+  }
+
+  def displaProjectsRootDirectory: Result = {
+    // an example that displays root directory of your project path
+    // requires environment: play.api.Environment to be injected into controller
+    Ok(environment.rootPath.getAbsolutePath)
+  }
+
 
   def index = Action {
-
-    implicit val feedWrites = Json.writes[Feed]
-    implicit val userWrites = Json.writes[User]
-    val feed = Seq(Feed("saasasas","assaasas"))
-    val user = User(2, "Tadas", "Vaidotas", feed)
-    val userJson = Json.toJson(user)
-    println("# " + userJson)
-
-    implicit val feedReads = Json.reads[Feed]
-    implicit val userReads = Json.reads[User]
-    val userFromJson = Json.fromJson[User](userJson)
-    println("# " + userFromJson)
-    Ok(views.html.index("Your new application is ready."))
+    Ok(views.html.index("Welcome"))
   }
 
   def listCDs = Action { implicit request =>
@@ -56,10 +58,6 @@ class Application @Inject()(val messagesApi: MessagesApi) extends Controller wit
       Redirect(routes.Application.listCDs)
     })
   }
-
-
-
-
 
 
 }
