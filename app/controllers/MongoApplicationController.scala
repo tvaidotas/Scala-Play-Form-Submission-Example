@@ -24,13 +24,13 @@ class MongoApplicationController @Inject()(val reactiveMongoApi: ReactiveMongoAp
   def create: Action[AnyContent] = Action.async {
     val user = User(29, "FirstName", "Lastname", List(Feed("BBC news", "http://www.bbc.co.uk")))
     val futureResult = collection.flatMap(_.insert(user))
-    futureResult.map(_ => Ok)
+    futureResult.map(_ => Ok("Added user " + user.firstName + " " + user.lastName))
   }
 
   def findByName: Action[AnyContent] = Action.async {
     val cursor: Future[Cursor[User]] = collection.map {
-      _.find(Json.obj("lastName" -> "Lastname")).
-        sort(Json.obj("created" -> -1))
+      _.find(Json.obj("lastName" -> "Lastname"))
+        .sort(Json.obj("created" -> -1))
         .cursor[User]
     }
     val futureUsersList: Future[List[User]] = cursor.flatMap(_.collect[List]())
