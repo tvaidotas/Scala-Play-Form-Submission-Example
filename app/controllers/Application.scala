@@ -6,10 +6,26 @@ import models.CD
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 
-class Application @Inject()(val messagesApi: MessagesApi) extends Controller with I18nSupport {
+class Application @Inject()(val messagesApi: MessagesApi, environment: play.api.Environment) extends Controller with I18nSupport {
+
+  def displayFile = Action {
+    // an example of serving the file
+    // you would need a route and to change the path to see how it works
+    Ok.sendFile(
+      content = new java.io.File("C:/Users/tadas/Desktop/toUploadTo/1.jpg"),
+      inline = true
+    )
+  }
+
+  def displaProjectsRootDirectory: Result = {
+    // an example that displays root directory of your project path
+    // requires environment: play.api.Environment to be injected into controller
+    Ok(environment.rootPath.getAbsolutePath)
+  }
+
 
   def index = Action {
-    Ok(views.html.index("Your new application is ready."))
+    Ok(views.html.index("Welcome"))
   }
 
   def listCDs = Action { implicit request =>
@@ -43,10 +59,6 @@ class Application @Inject()(val messagesApi: MessagesApi) extends Controller wit
       Redirect(routes.Application.listCDs)
     })
   }
-
-
-
-
 
 
 }
