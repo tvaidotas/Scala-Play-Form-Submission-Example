@@ -1,7 +1,7 @@
 package models
 
 case class User(
- age: Int,
+ age: Option[Int],
  firstName: String,
  lastName: String,
  feeds: Seq[Feed]
