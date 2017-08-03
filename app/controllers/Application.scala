@@ -1,36 +1,34 @@
 package controllers
 
-import java.io.{ByteArrayOutputStream, File}
+import java.io._
 import javax.imageio.ImageIO
 import javax.inject.Inject
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64
 import models.CD
 import play.api.i18n.{I18nSupport, MessagesApi}
-
 import akka.stream.Materializer
 import play.api.http.ContentTypes
 import play.api.libs.Comet
 import play.api.mvc._
-
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-import akka.stream.scaladsl.Source
+import akka.stream.scaladsl.{FileIO, Source, StreamConverters}
+import akka.util.ByteString
+import play.api.cache.{CacheApi, Cached}
 import play.api.libs.json._
 
+import scala.concurrent.Future
 import scala.concurrent.duration._
 
 
-class Application @Inject()(val messagesApi: MessagesApi, val materializer: Materializer) extends Controller with I18nSupport {
+class Application @Inject()(val messagesApi: MessagesApi, val materializer: Materializer, cache: Cached,
+                            log: LoggingFilter) extends Controller with I18nSupport {
 
 //  def index = Action {
 //    Ok(views.html.index(returnBytedImage))
 //  }
-
-  def index() = Action {
-    Ok(views.html.comet())
-  }
 
   def listCDs = Action { implicit request =>
     // we return a view file which expects two arguments passed to it
@@ -88,17 +86,32 @@ class Application @Inject()(val messagesApi: MessagesApi, val materializer: Mate
     "Byting failed"
   }
 
-  def cometString = Action {
+
+
+
+  def index = Action {
+    Ok("Hello world!")
+  }
+
+  def helloUser = AuthenticatedAction { request =>
+    Ok(s"Hello ${request.user.username}")
+  }
+
+  def cometString = AuthenticatedAction {
     implicit val m = materializer
-    def stringSource: Source[String, _] = Source(List("kiki", "foo", "bar"))
+    def stringSource: Source[String, _] = Source(List("kiki", "foo", "bar","kiki", "foo", "bar","kiki", "foo", "bar", "kiki", "foo", "bar", "kiki", "foo", "bar", "kiki", "foo", "bar", "kiki", "foo", "bar", "kiki", "foo", "bar", "kiki", "foo", "bar", "kiki", "foo", "bar", "kiki", "foo", "bar", "kiki", "foo", "bar", "kiki", "foo", "bar"))
     Ok.chunked(stringSource via Comet.string("parent.cometMessage")).as(ContentTypes.HTML)
   }
 
-  def cometJson = Action {
+  def cometJson = LoggingAction {
     implicit val m = materializer
-    def jsonSource: Source[JsValue, _] = Source(List(JsString("jsonString")))
+    def jsonSource: Source[JsValue, _] = Source(List(JsString("This is a json string"),JsString("This is a json string"),JsString("This is a json string"),JsString("This is a json string"),JsString("This is a json string"),JsString("This is a json string"),JsString("This is a json string"),JsString("This is a json string"),JsString("This is a json string")))
     Ok.chunked(jsonSource via Comet.json("parent.cometMessage")).as(ContentTypes.HTML)
   }
+
+
+
+
 
   def streamClock() = Action {
     Ok.chunked(stringSource via Comet.string("parent.clockChanged")).as(ContentTypes.HTML)
@@ -110,6 +123,44 @@ class Application @Inject()(val messagesApi: MessagesApi, val materializer: Mate
     val s = tickSource.map((tick) => df.format(ZonedDateTime.now()))
     s
   }
+
+  def chunked = LoggingAction {
+    val data =  new ByteArrayInputStream (serialise("Hello"))
+    println(serialise("hello")) // serializing something
+    println(deserialise(serialise("hello"))) // deserializing
+    val dataContent: Source[ByteString, _] = StreamConverters.fromInputStream(() => data)
+    Ok.chunked(dataContent)
+  }
+
+  def serialise(value: Any): Array[Byte] = {
+    val stream: ByteArrayOutputStream = new ByteArrayOutputStream()
+    val oos = new ObjectOutputStream(stream)
+    oos.writeObject(value)
+    oos.close
+    stream.toByteArray
+  }
+
+  def deserialise(bytes: Array[Byte]): Any = {
+    val ois = new ObjectInputStream(new ByteArrayInputStream(bytes))
+    val value = ois.readObject
+    ois.close
+    value
+  }
+
+  def chunkedFromSource = Action {
+    val source = Source.apply(List("kiki", "foo", "bar"))
+    Ok.chunked(source)
+  }
+
+//  def ItemAction(itemId: String) = new ActionRefiner[UserRequest, ItemRequest] {
+//    def refine[A](input: UserRequest[A]) = Future.successful {
+//      ItemDao.findById(itemId)
+//        .map(new ItemRequest(_, input))
+//        .toRight(NotFound)
+//    }
+//  }
+
+
 
 }
 
