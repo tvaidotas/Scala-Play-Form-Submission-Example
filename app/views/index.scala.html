@@ -1,8 +1,8 @@
-@(message: String)
+@()(implicit messages: Messages, lang: Lang, request:RequestHeader)
 
-
-@main("Welcome to Play") {
-
-    @play20.welcome(message)
-
-}
+<p>Current = @lang</p>
+<p>Title: @messages("home.title")</p>
+<ul>
+    <li><a href="@routes.LanguageController.switchToLanguage("en", request.uri)">English</a></li>
+    <li><a href="@routes.LanguageController.switchToLanguage("cy", request.uri)">Welsh</a></li>
+</ul>

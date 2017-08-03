@@ -3,7 +3,7 @@ package controllers
 import javax.inject.Inject
 
 import models.CD
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc._
 
 class Application @Inject()(val messagesApi: MessagesApi, environment: play.api.Environment) extends Controller with I18nSupport {
@@ -24,8 +24,8 @@ class Application @Inject()(val messagesApi: MessagesApi, environment: play.api.
   }
 
 
-  def index = Action {
-    Ok(views.html.index("Welcome"))
+  def index = Action { implicit request =>
+    Ok(views.html.index())
   }
 
   def listCDs = Action { implicit request =>
