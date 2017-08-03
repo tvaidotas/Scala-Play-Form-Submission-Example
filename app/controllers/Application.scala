@@ -25,8 +25,11 @@ class Application @Inject()(val messagesApi: MessagesApi, environment: play.api.
 
 
   def index = Action { implicit request =>
+    println("blhas")
     Ok(views.html.index())
   }
+
+
 
   def listCDs = Action { implicit request =>
     // we return a view file which expects two arguments passed to it
