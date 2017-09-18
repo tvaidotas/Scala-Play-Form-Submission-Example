@@ -1,6 +1,10 @@
 @()(implicit messages: Messages, lang: Lang, request:RequestHeader)
 
-<p>Current = @lang</p>
+@import java.lang.String; var name="template"
+
+<p>Current @name = @lang</p>
+<p>Current @{name = "damn"} = @lang</p>
+<p>Current @name = @lang</p>
 <p>Title: @messages("home.title")</p>
 <ul>
     <li><a href="@routes.LanguageController.switchToLanguage("en", request.uri)">English</a></li>

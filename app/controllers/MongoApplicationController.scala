@@ -19,13 +19,13 @@ class MongoApplicationController @Inject()(val reactiveMongoApi: ReactiveMongoAp
 
   def collection: Future[JSONCollection] = database.map(_.collection[JSONCollection]("persons"))
 
-  def create: Action[AnyContent] = Action.async {
+  def create: Action[AnyContent] = Action.async { implicit request =>
     val user = User(None, "Tom", "Jefferson", List(Feed("BBC news", "http://www.bbc.co.uk")))
     val futureResult = collection.flatMap(_.insert(user))
     futureResult.map(_ => Ok("Added user " + user.firstName + " " + user.lastName))
   }
 
-  def findByName: Action[AnyContent] = Action.async {
+  def findByName: Action[AnyContent] = Action.async { implicit request =>
     val cursor: Future[Cursor[User]] = collection.map {
       //_.find(Json.obj("lastName" -> "Lastname"))  // searching by a particular field
       _.find(Json.obj())                            // getting averything from the collection
@@ -38,14 +38,14 @@ class MongoApplicationController @Inject()(val reactiveMongoApi: ReactiveMongoAp
     }
   }
 
-  def update: Action[AnyContent] = Action.async {
+  def update: Action[AnyContent] = Action.async { implicit request =>
     val user = User(Some(40), "Jack", "Johnes", List(Feed("BBC news", "http://www.bbc.co.uk")))
     val selector = BSONDocument("firstName" -> "Tom") // looking for the record based on some field
     val futureResult = collection.map(_.findAndUpdate(selector,user))
     futureResult.map(_ => Ok("Updated user"))
   }
 
-  def remove: Action[AnyContent] = Action.async {
+  def remove: Action[AnyContent] = Action.async { implicit request =>
     // deleteting a record based on some field
     val futureResult = collection.map{_.findAndRemove(Json.obj("firstName"->"Tom"))}
     futureResult.map(_ => Ok("Deleted user"))

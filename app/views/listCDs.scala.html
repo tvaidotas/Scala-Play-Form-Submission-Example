@@ -1,4 +1,4 @@
-@(cds: Seq[CD], form: Form[CD])(implicit messages: Messages)
+@(cds: Seq[CD], form: Form[CD])(implicit messages: Messages, lang: Lang, request:RequestHeader)
 
 @* the template file is like a function and therefore it can have expected arguments *@
 @* in this case it is expecting a collection of CD's for us to display  *@

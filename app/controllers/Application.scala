@@ -6,9 +6,10 @@ import models.CD
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc._
 
-class Application @Inject()(val messagesApi: MessagesApi, environment: play.api.Environment) extends Controller with I18nSupport {
+class Application @Inject()(val messagesApi: MessagesApi, environment: play.api.Environment) extends Controller
+  with I18nSupport {
 
-  def displayFile = Action {
+  def displayFile = Action { implicit request =>
     // an example of serving the file
     // you would need a route and to change the path to see how it works
     Ok.sendFile(
@@ -53,16 +54,16 @@ class Application @Inject()(val messagesApi: MessagesApi, environment: play.api.
     formValidationResult.fold({ formWithErrors =>
       BadRequest(views.html.listCDs(CD.cds, formWithErrors))
     }, { cd =>
+      cd
       // the second case is the good one were the data is of the correct type therefore the cd will hold the value
       // of CD, which we then add to the list of the CDs that we have inside the CD object
       // and lastly we return a Redirect response where we take the person to the same page but list all the CDs out
       // as we're using the reverse route of .listCDs, therefore after adding a CD and submitting the form
       // we will see the CD come up on the page
       CD.cds.append(cd)
-      Redirect(routes.Application.listCDs)
+      Redirect(routes.Application.listCDs())
     })
   }
-
 
 }
 

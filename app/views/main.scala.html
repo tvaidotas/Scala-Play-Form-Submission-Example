@@ -1,4 +1,4 @@
-@(title: String)(content: Html)
+@(title: String)(content: Html)(implicit messages: Messages, lang: Lang, request:RequestHeader)
 
 <!DOCTYPE html>
 
@@ -11,5 +11,6 @@
     </head>
     <body>
         @content
+        @index()
     </body>
 </html>
