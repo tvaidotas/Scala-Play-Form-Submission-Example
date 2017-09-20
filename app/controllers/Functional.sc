@@ -1,5 +1,7 @@
 import play.libs.F.Tuple
 
+import scala.collection.mutable.ArrayBuffer
+
 /***
 def favouriteBeer(): String = "Guinness"
 println(s"My favourite beer is ${favouriteBeer()}") // will be evaluated to -> My favourite beer is Guinness
@@ -115,6 +117,120 @@ matchTuple(5) // will be evaluated to -> Unrecognised tuple
 ***/
 
 // TODO - 10 code example from collections
+
+/**
+implicit val discount: Double = 0.1 // implicit values can be defined anywhere in the code base
+
+def totalPrice(qountity: Int, price: Double)(implicit discount: Double): Double = qountity * price * ( 1 - discount )
+
+totalPrice(10, 3.5) // we can call the function with the first set of arguments and the discount value will be picked up
+// as the implicit value we defined somewhere in the code base therefore this will be evaluated to -> 31.5
+
+totalPrice(10, 3.5)(0.5) // if we want to pass a discount value explicitly instead of using the implicit value we can
+// pass it directly therefore this will be evaluated to -> 17.5
+**/
+
+// TODO - 11 code example from collections
+
+/**
+case class Beer (beerName: String, price: Double, productCode: Option[Long])
+
+object BeerImplicits {
+  implicit class ImprovingBeer(beer: Beer) {
+    def uuid: String = {
+      s"Name: ${beer.beerName}, price: ${beer.price}, code: ${beer.productCode.getOrElse("no code found")}"
+    }
+  }
+}
+
+import BeerImplicits._
+val guinness: String = Beer("Guinness", 2.5, None).uuid
+val stella: String = Beer("Stella", 2.5, Some(321)).uuid
+
+println(guinness) // will be evaluated to -> Name: Guinness, price: 2.5, code: no code found
+println(stella) // will be evaluated to -> Name: Stella, price: 2.5, code: 321
+**/
+
+// TODO - 12 code example from collections
+
+/**
+def applyDiscount(discount: String): Unit = println(s"You will receive the discount of $discount")
+
+def applyDiscount(discount: Double): Unit = println(s"You will receive the discount of $discount")
+
+applyDiscount("0.5") // will be evaluated to -> You will receive the discount of 0.5
+applyDiscount(0.5) // will be evaluated to -> You will receive the discount of 0.5
+**/
+
+// TODO - 13 code example from collections
+
+/**
+def applyDiscount[T](discount: T): Unit = {
+    discount match {
+      case disc: String => println(s"You will receive the discount of $discount")
+      case disc: Double => println(s"You will receive the discount of $discount")
+      case _ => println(s"Unrecognised discount")
+    }
+}
+
+applyDiscount("10%") // will be evaluated to -> You will receive the discount of 10%
+applyDiscount(0.1) // will be evaluated to -> You will receive the discount of 0.1
+applyDiscount(10) // will be evaluated to -> Unrecognised discount
+**/
+
+// TODO - 14 code example from collections
+
+/**
+def applyDiscount[T](discount: T): List[T] = {
+  discount match {
+    case disc: String => List[T](discount)
+    case disc: Double => List[T](discount)
+    case _ => List[T](discount)
+  }
+}
+
+applyDiscount("10%") // will be evaluated to -> List(10%)
+applyDiscount(0.1) // will be evaluated to -> List(0.1)
+applyDiscount(10) // will be evaluated to -> List(10)
+**/
+
+// TODO - 15 code example from collections
+
+/**
+// by adding the * symbol next to the type of the argument, we can now pass more than one value
+def giveListBack[T](items: T*): Unit = items.foreach(print(_))
+giveListBack("H", 3, "ll", 'o') // will be evaluated to -> H3llo
+**/
+
+// TODO - 16 code example from collections
+
+/**
+class BeerPrice{
+  val price: Double = 3.5
+  def substractFromPrice(discount: Double) = price - price * discount
+}
+
+val beerPrice = new BeerPrice
+println(f"Your total after the discount comes to: ${beerPrice.substractFromPrice(0.1)}") // will be evaluated to -> Your total after the discount comes to: 3.15
+**/
+
+// TODO - 17 code example from collections
+
+/**
+class BeerPrice{
+  val price: Double = 3.5
+  def -(discount: Double) = price - price * discount
+}
+
+val beerPrice = new BeerPrice
+println(f"Your total after the discount comes to: ${beerPrice - 0.1}") // will be evaluated to -> Your total after the discount comes to: 3.15
+**/
+
+// TODO - 17 code example from collections
+
+
+
+
 
 
 
