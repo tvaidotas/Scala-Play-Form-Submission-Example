@@ -1,11 +1,11 @@
 @(cds: Seq[CD], form: Form[CD])(implicit messages: Messages)
 
-@* the template file is like a function and therefore it can have expected arguments *@
-@* in this case it is expecting a collection of CD's for us to display  *@
-@* it also expects a form of type CD *@
-@* then we have the implicit messages in the second set of arguments *@
-@* the implicit messages is required for the form helper to build up the form *@
-@* due to the plays ability of supporting internationalisation *@
+@* the template file is like a function and therefore it can have expected arguments
+ in this case it is expecting a collection of CD's for us to display
+ it also expects a form of type CD
+ then we have the implicit messages in the second set of arguments
+ the implicit messages is required for the form helper to build up the form
+ due to the plays ability of supporting internationalisation *@
 
 @main("CDs") {
 
@@ -24,26 +24,26 @@
 
   <hr/>
 
-  @* helper.form basically replaces the need for you to define the form in HTML *@
-  @* we start by using the helper.form and inside the parentheses we define where this form *@
-  @* will be posted to *@
-  @* after that we define the input text fields to which we pass the form which was passed by the  *@
-  @* controller method and define that this inputText field is the name field which we need for our CD case class *@
-  @* additionally we are able to pass other fields for when the text field is created so that the HTML for it  *@
-  @* would have a specific id and a class set *@
-  @* if you don't want to define the additional fields then you can just pass the form and to which case class  *@
-  @* field this maps to *@
-  @* lastly we have a button to actually submit this form *@
+  @* helper.form basically replaces the need for you to define the form in HTML
+  we start by using the helper.form and inside the parentheses we define where this form
+   will be posted to
+   after that we define the input text fields to which we pass the form which was passed by the
+   controller method and define that this inputText field is the name field which we need for our CD case class
+  additionally we are able to pass other fields for when the text field is created so that the HTML for it
+  would have a specific id and a class set
+  if you don't want to define the additional fields then you can just pass the form and to which case class
+  field this maps to
+  lastly we have a button to actually submit this form *@
   @helper.form(routes.Application.createCD()) {
-    @* an example of how we can pass additional arguments for the helper *@
-    @* in this CD example having '_showConstraints -> false will hide the requirement Required *@
+    @* an example of how we can pass additional arguments for the helper
+     in this CD example having '_showConstraints -> false will hide the requirement Required *@
     @helper.inputText(form("name"), '_label -> "Name", '_showConstraints -> false)
     @helper.inputText(form("price"), '_label -> "Price" , '_showConstraints -> false)
     <button type="submit">Create CD</button>
   }
 
-  @* This helper will generate the HTML for this form and it will look like this *@
-  @* <form action="/cds" method="POST">
+  @* This helper will generate the HTML for this form and it will look like this
+   <form action="/cds" method="POST">
     <dl class=" " id="name_field">
       <dt><label for="name">Name</label></dt>
       <dd>
